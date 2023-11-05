@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.gis",
     "geoDjangoProject",
+    'leaflet',
+    'itineraryapp',
     "world"
 ]
 
@@ -140,3 +142,17 @@ CRISPY_TEMPLATE_PACK = 'uni_form'
 
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
+
+LEAFLET_CONFIG = {
+    'DEFAULT_CENTER': (53.0, -8.0),
+    'DEFAULT_ZOOM': 6,
+    'MIN_ZOOM': 3,
+    'MAX_ZOOM': 18,
+    'RESET_VIEW': False,
+    'SCALE': None,
+    'OPACITY': 0.5,
+}
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static")
+]

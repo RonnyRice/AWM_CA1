@@ -1,12 +1,22 @@
+
 <!-- templates/home.html-->
 {% extends "base.html" %}
+{% load leaflet_tags %}
 
 {% block title %}Home{% endblock %}
 
 {% block content %}
+
 {% if user.is_authenticated %}
-  Hi {{ user.username }}!
-  <p><a href="{% url 'logout' %}">Log Out</a></p>
+    {% include "navbar.html" %}
+    <div>
+        <div>
+
+        </div>
+    </div>
+    <div class="leaflet-container-default">
+         {% leaflet_map "yourmap" %}
+    </div>
 {% else %}
   <p>You are not logged in</p>
   <a href="{% url 'login' %}">Log In</a>

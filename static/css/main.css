@@ -1,0 +1,17 @@
+.leaflet-container-default{
+    float: right;
+    width: 75%;
+}
+
+
+.itinerary-container { grid-area: itinerarylist; }
+.map-container { grid-area: map; }
+.main-container { grid-area: main; }
+
+
+.grid-container {
+    border: 20px;
+  grid-template-areas:
+    'map map map map itinerarylist itinerarylist'
+    'main main main main itinerarylist itinerarylist';
+}
