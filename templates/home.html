@@ -100,7 +100,7 @@
                     $(document).ready(function() {
                     // Make a POST request using jQuery AJAX to update user location given location permissions
                  let csrfToken = $('[name=csrfmiddlewaretoken]').val();
-
+/*
                      $.ajax({
                     type: 'POST',
                     url: '{% url "updateUserLocation" %}',
@@ -117,7 +117,10 @@
                         console.log('Error In ajax function updating location ');
                     }
                 });
+                */
                     });
+
+
                  // Add a marker for the current location
                 var currentLocationMarker = L.marker([user_lat, user_lon], { icon: userLocationIcon })
                 .addTo(detail.map)

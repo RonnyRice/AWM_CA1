@@ -93,10 +93,10 @@ WSGI_APPLICATION = "geoDjangoProject.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
-        "NAME": "postgres",
+        "NAME": "gis",
         "USER": "docker",
         "PASSWORD": "docker",
-        "HOST": "127.0.0.1",
+        "HOST": "localhost",
         "PORT": '25432',
     }
 }
@@ -141,7 +141,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CRISPY_TEMPLATE_PACK = 'uni_form'
 
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
@@ -160,21 +159,23 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
 
-# change this
-#if socket.gethostname() == "MacBook-Pro-2.local":
-#    DATABASES["default"]["HOST"] = "wmap_postgis"
-#    DATABASES["default"]["PORT"] = "5432"
-#else:
-#    DATABASES["default"]["HOST"] = "wmap_postgis"
-#    DATABASES["default"]["PORT"] = "5432"
-
-# Set DEPLOY_SECURE to True only for LIVE deployment
 DEPLOY_SECURE = False
 
+
+if socket.gethostname() == "MacBook-Pro-2.local":
+    DATABASES["default"]["HOST"] = "localhost"
+    DATABASES["default"]["PORT"] = "25432"
+else:
+    DATABASES["default"]["HOST"] = "wmap_postgis"
+    DATABASES["default"]["PORT"] = "5432"
+    DEPLOY_SECURE = True
+
+
+# Set DEPLOY_SECURE to True only for LIVE deployment
 if DEPLOY_SECURE:
     DEBUG = False
     TEMPLATES[0]["OPTIONS"]["debug"] = False
-    # ALLOWED_HOSTS = ['.your-domain-name.xyz',  'localhost',]
+    ALLOWED_HOSTS = ['ronliquit.com',  'localhost',]
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
 else:
@@ -186,3 +187,5 @@ else:
     SESSION_COOKIE_SECURE = False
 
 
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+CRISPY_FAIL_SILENTLY = not DEBUG
