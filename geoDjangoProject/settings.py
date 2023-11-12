@@ -95,7 +95,7 @@ DATABASES = {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
         "NAME": "gis",
         "USER": "docker",
-        "PASSWORD": "password123",
+        "PASSWORD": "docker",
         "HOST": "localhost",
         "PORT": '25432',
     }
@@ -159,7 +159,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
 
-DEPLOY_SECURE = False
+DEPLOY_SECURE = True
 
 
 if socket.gethostname() == "MacBook-Pro-2.local":
