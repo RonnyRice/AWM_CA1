@@ -168,7 +168,7 @@ if socket.gethostname() == "MacBook-Pro-2.local":
 else:
     DATABASES["default"]["HOST"] = "wmap_postgis"
     DATABASES["default"]["PORT"] = "5432"
-    DEPLOY_SECURE = False
+    DEPLOY_SECURE = True
 
 
 # Set DEPLOY_SECURE to True only for LIVE deployment
