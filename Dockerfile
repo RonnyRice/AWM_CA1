@@ -14,6 +14,8 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 # Get the following libraries. We can install them "globally" on the image as it will contain only our project
 #RUN apt-get -y install build-essential python-cffi libcairo2 libpango-1.0-0 libpangocairo-1.0-0 libgdk-pixbuf2.0-0 libffi-dev shared-mime-info
+#must use ASL logging (which requires CGO) if running as root
+ENV CGO_ENABLED=1
 # You should have already exported your conda environment toan "ENV.yml" file.
 # Now copy this to the image and install everything in it.Make sure to install uwsgi - it may not be in the source
 # environment.
