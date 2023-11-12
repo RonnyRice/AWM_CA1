@@ -1,18 +1,74 @@
-.leaflet-container-default{
-    float: right;
-    width: 75%;
+
+#main{
+    margin-top: 10vh;
+    min-height: 100vh;
+    width: auto;
+    background-color: antiquewhite;
+}
+
+.tile{
+    background-color: white;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    padding: 1vw;
+    align-items: center;
+    flex-direction: column;
+}
+
+.newItineraryContainer {
+    background-color: white;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    padding: 1%;
+    margin: 1%;
+    align-items: center;
+    flex-direction: column;
+}
+
+.custom_button{
+    background-color: bisque !important;
+    border-radius: 20px;
+    border-color: bisque !important;
 }
 
 
-.item1 { grid-area: header; }
-.item2 { grid-area: menu; }
-.item3 { grid-area: main; }
-.item4 { grid-area: right; }
-.item5 { grid-area: footer; }
+.leaflet-container {  /* all maps */
+        width:  100%;
+        height: 400px;
+    }
+
+ #specialbigmap {
+        height: 800px;
+    }
+
+ .icon-style{
+     width: 10vw;
+     height: 10vw;
+     max-height: 300px;
+     max-width: 300px;
+     opacity: 0.8;
+     fill: bisque;
+ }
+
+ .custom_border {
+     border-radius: 20px !important;
+     border-color: bisque !important;
+ }
+.itinerary-container { grid-area: itinerarylist; }
+.map-container { grid-area: map; }
+.main-container { grid-area: main; }
 
 .grid-container {
-  grid-template-areas:
-    'header header header header header header'
-    'menu main main main right right'
-    'menu footer footer footer footer footer';
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr ;
+    grid-template-areas:
+    'map map map map itinerarylist itinerarylist'
+    'main main main main itinerarylist itinerarylist';
 }

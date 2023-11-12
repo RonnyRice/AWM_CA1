@@ -9,16 +9,181 @@
 
 {% if user.is_authenticated %}
     {% include "navbar.html" %}
-    <div>
-        <div>
+    {% include "modals.html" %}
 
+    <div id="main">
+        <div class="grid-container">
+            <div class="map-container">
+                 <div class="tile">
+                {% leaflet_map "yourmap" %}
+                     <p><span>Current Latitude:</span> <span>Current Longitude:</span></p>
+                </div>
+            </div>
+            <div class="main-container">
+                <div class="tile">
+                    <h3>Itinerary</h3>
+                    {% if user_ItineraryPlanSelected %}
+                        <div>
+                        <h2>
+                            {{ user_ItineraryPlanSelected.ItineraryPlan_title }}
+                        </h2>
+                        <p>{{ user_ItineraryPlanSelected.ItineraryPlan_description }}</p>
+
+                        </div>
+                        <div class="card-deck">
+                    	{% for user_ItineraryEvents in user_ItineraryEventsSelected %}
+                             <div class="card" id="card-{{ user_ItineraryEvents.id }}">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ user_ItineraryEvents.ItineraryEvent_title }}</h5>
+                                    <p class="card-text">{{ user_ItineraryEvents.itineraryEvent_description }}</p>
+                                </div>
+                              <div class="card-footer">
+                                    <p class="card-text"><small class="text-muted">{{ user_ItineraryEvents.itineraryEvent_datetime }}</small></p>
+                                    </div>
+                             </div>
+                    	{% endfor %}
+                        </div>
+                        {% else %}
+                        <div class="card text-center custom_border">
+                    <div class="card-body custom_border">
+                        <h5 class="card-title">Create an itinerary</h5>
+                        <p class="card-text">Create an itinerary plan or click existing plans</p>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-suitcase2-fill icon-style" viewBox="0 0 16 16">
+  <path d="M6.5 0a.5.5 0 0 0-.5.5V3H4.5A1.5 1.5 0 0 0 3 4.5v9a1.5 1.5 0 0 0 1.003 1.416A1 1 0 1 0 6 15h4a1 1 0 1 0 1.996-.084A1.5 1.5 0 0 0 13 13.5v-9A1.5 1.5 0 0 0 11.5 3H10V.5a.5.5 0 0 0-.5-.5h-3ZM9 3H7V1h2v2ZM4 7V6h8v1H4Z"></path>
+</svg>
+                    </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="itinerary-container">
+                 <div class="tile">
+                     <h3>Holiday plan</h3>
+                    <div class="card text-center custom_border">
+                    <div class="card-body">
+
+                        <div class="list-group" id="list-tab" role="tablist">
+                        {% for listItem in user_ItineraryPlan %}
+                            <a class="list-group-item list-group-item-action selected-plan" id="{{ listItem.ItineraryPlan_title }}" data-toggle="list"  data-value ="{{ listItem.ItineraryPlan_id}}" href="#list-home" role="tab" aria-controls="home">{{ listItem.ItineraryPlan_title}} ID:{{ listItem.ItineraryPlan_id}} </a>
+                        {% endfor %}
+                        </div>
+                            <br>
+                        <button type="button" class=" custom_button btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                            Add Plan
+                        </button>
+                    </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="leaflet-container-default">
-         {% leaflet_map "yourmap" %}
-    </div>
+
 {% else %}
   <p>You are not logged in</p>
   <a href="{% url 'login' %}">Log In</a>
 {% endif %}
+     <script>
+    window.addEventListener("map:init", function (e) {
+        // our map
+        var detail = e.detail;
+
+        if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function (position){
+                    var user_lat = position.coords.latitude;
+                    var user_lon = position.coords.longitude;
+
+                    var userLocationIcon = L.divIcon({
+                        className: 'custom-icon',
+                        html: '<i class="fa fa-circle-user" style="width:25px; height: 41px; transform: scale(2,2)"></i>'
+                    });
+
+                    $(document).ready(function() {
+                    // Make a POST request using jQuery AJAX to update user location given location permissions
+                 let csrfToken = $('[name=csrfmiddlewaretoken]').val();
+
+                     $.ajax({
+                    type: 'POST',
+                    url: '{% url "updateUserLocation" %}',
+                    data: {
+                        'user_lat': user_lat,
+                        'user_lon': user_lon,
+                        'csrfmiddlewaretoken': csrfToken
+                    },
+                    success: function(response) {
+                        location.reload();
+                    console.log("ajax function called for updating location");
+                    },
+                    error: function(error) {
+                        console.log('Error In ajax function updating location ');
+                    }
+                });
+                    });
+                 // Add a marker for the current location
+                var currentLocationMarker = L.marker([user_lat, user_lon], { icon: userLocationIcon })
+                .addTo(detail.map)
+                .bindPopup('Current Location').openPopup();
+                detail.map.setView([user_lat, user_lon], 6);
+                });
+
+
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+
+         var visitedLocationIcon = L.divIcon({
+                        className: 'custom-icon',
+                        html: '<i id="visited-icon" class="fa-solid fa-location-dot" style=" color: #f70202; width:25px; height: 41px; transform: scale(2,2); z-index: 335; outline: none;" ></i>'
+                    });
+
+        //create itinarary markers
+        detail.map.on('click', (event) =>{
+
+            $('#visited-icon').remove();
+
+            var visited = L.marker([event.latlng.lat, event.latlng.lng], {icon :visitedLocationIcon }).addTo(detail.map)
+            $('#createItineraryEvent').modal('toggle')
+            $('#itineraryEvent_Latitude').val(event.latlng.lat)
+            $('#itineraryEvent_Longitude').val(event.latlng.lng)
+        })
+
+        //display itinerary markers on page load
+        {% for user_ItineraryEventsMaker in user_ItineraryEventsSelected %}
+            var itinerary_lon = {{ user_ItineraryEventsMaker.lon }}
+            var itinerary_lat = {{ user_ItineraryEventsMaker.lat }}
+            var marker = L.marker([itinerary_lat,itinerary_lon ]).addTo(detail.map)
+                .bindPopup('<b> {{ user_ItineraryEventsMaker.ItineraryEvent_title }} </b>').openPopup();  // Add a popup with the title
+    {% endfor %}
+
+    }, false);
+
+$(document).ready(function() {
+            $('.selected-plan').click(function(event) {
+                // Prevent the default link behavior
+                event.preventDefault();
+
+                // Get the value you want to send with the link click
+                let linkValue = $(this).data('value');
+                console.log(linkValue);
+                // Get the CSRF token
+                let csrfToken = $('[name=csrfmiddlewaretoken]').val();
+
+                // Make a POST request using jQuery AJAX
+                $.ajax({
+                    type: 'POST',
+                    url: '{% url "selectItineraryEvent" %}',
+                    data: {
+                        'itinerary_link_value': linkValue,
+                        'csrfmiddlewaretoken': csrfToken
+                    },
+                    success: function(response) {
+                        location.reload();
+                    console.log("ajax function called for selecting plan");
+                    },
+                    error: function(error) {
+                        alert('Error In selecting Itinerary plan' );
+                    }
+                });
+            });
+        });
+</script>
 {% endblock %}

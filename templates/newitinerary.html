@@ -1,17 +1,24 @@
 {% extends "base.html" %}
+{% load leaflet_tags %}
+
 
 {% block title %}Create Itinerary{% endblock %}
 
 {% block content %}
 {% if user.is_authenticated %}
+    {% include "navbar.html" %}
+    <div id="main">
+    <br>
+      <div class="newItineraryContainer">
+          <h1> Create a new Itinerary</h1>
+          <br>
+          {% leaflet_map "yourmap" %}
 
-  Hi {{ user.username }}!
+        </div>
 
-  <p><a href="{% url 'logout' %}">Log Out</a></p>
-
-    <div class="leaflet-container-default">
-         {% leaflet_map "yourmap" %}
     </div>
+
+
 {% else %}
   <p>You are not logged in</p>
   <a href="{% url 'login' %}">Log In</a>

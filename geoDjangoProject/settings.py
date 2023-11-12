@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import socket
 import os
 from pathlib import Path
 
@@ -19,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-+rmf@@u^xcc)t68)4r0k_*!8q_@^(le_82cyv(_m*28h#1z2kk"
+SECRET_KEY = "qk(t&0fh*7wo=x1f-8$^@#&mme$#e3hj4mrp2s-&-13@ty+g43"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -43,7 +44,7 @@ INSTALLED_APPS = [
     "django.contrib.gis",
     "geoDjangoProject",
     'leaflet',
-    'itineraryapp',
+    'itinerary',
     "world"
 ]
 
@@ -57,6 +58,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 ROOT_URLCONF = "geoDjangoProject.urls"
 
@@ -90,7 +93,7 @@ WSGI_APPLICATION = "geoDjangoProject.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.contrib.gis.db.backends.postgis",
-        "NAME": "gis",
+        "NAME": "postgres",
         "USER": "docker",
         "PASSWORD": "docker",
         "HOST": "127.0.0.1",
@@ -156,3 +159,30 @@ LEAFLET_CONFIG = {
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
+
+# change this
+#if socket.gethostname() == "MacBook-Pro-2.local":
+#    DATABASES["default"]["HOST"] = "wmap_postgis"
+#    DATABASES["default"]["PORT"] = "5432"
+#else:
+#    DATABASES["default"]["HOST"] = "wmap_postgis"
+#    DATABASES["default"]["PORT"] = "5432"
+
+# Set DEPLOY_SECURE to True only for LIVE deployment
+DEPLOY_SECURE = False
+
+if DEPLOY_SECURE:
+    DEBUG = False
+    TEMPLATES[0]["OPTIONS"]["debug"] = False
+    # ALLOWED_HOSTS = ['.your-domain-name.xyz',  'localhost',]
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+else:
+    DEBUG = True
+    TEMPLATES[0]["OPTIONS"]["debug"] = True
+    ALLOWED_HOSTS = ['*', ]
+    # CSRF
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = False
+
+

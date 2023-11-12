@@ -1,0 +1,76 @@
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <form action="{% url 'addItinerary' %}" method="post">
+          {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Itinerary plan</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <label for="itineraryPlan_name">Itinerary Title</label>
+          <br>
+          <input id="itineraryPlan_name" type="text" name="itineraryPlan_name" value="default title">
+          <br>
+
+         <label for="itineraryPlan_desc"></label>
+          <br>
+        <textarea id="itineraryPlan_desc" name="itineraryPlan_desc" rows="4" cols="20">It will be the best holiday Ever!
+        </textarea>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+        </form>
+  </div>
+  </div>
+</div>
+
+<div class="modal fade" id="createItineraryEvent" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+        <form action="{% url 'addItineraryEvent' %}" method="post">
+          {% csrf_token %}
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Itinerary Event</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+          <label for="itineraryEvent_name">Itinerary Event Title</label>
+          <br>
+          <input id="itineraryEvent_name" type="text" name="itineraryEvent_name" value="default title">
+          <br>
+          <label for="itineraryEvent_DateTime">Itinerary Event Date time</label>
+          <br>
+          <input id="itineraryEvent_DateTime" type="datetime-local" name="itineraryEvent_DateTime" value="{% now "Y-m-d H:i:s.uO" %}">
+          <br>
+         <label for="itineraryEvent_desc"></label>
+          <br>
+        <textarea id="itineraryEvent_desc" name="itineraryEvent_desc" rows="4" cols="20">It will be the best holiday Ever!
+        </textarea>
+          <br>
+          <input id="itineraryEvent_Longitude" type="hidden" name="itineraryEvent_Longitude">
+          <input id="itineraryEvent_Latitude" type="hidden" name="itineraryEvent_Latitude">
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary">Save changes</button>
+      </div>
+        </form>
+  </div>
+  </div>
+</div>
+<!--                <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-list-task icon-style" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M2 2.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5V3a.5.5 0 0 0-.5-.5H2zM3 3H2v1h1V3z"></path>
+  <path d="M5 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM5.5 7a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9zm0 4a.5.5 0 0 0 0 1h9a.5.5 0 0 0 0-1h-9z"></path>
+  <path fill-rule="evenodd" d="M1.5 7a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5V7zM2 7h1v1H2V7zm0 3.5a.5.5 0 0 0-.5.5v1a.5.5 0 0 0 .5.5h1a.5.5 0 0 0 .5-.5v-1a.5.5 0 0 0-.5-.5H2zm1 .5H2v1h1v-1z"></path>
+</svg> -->

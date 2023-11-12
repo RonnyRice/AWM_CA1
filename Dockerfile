@@ -36,3 +36,4 @@ EXPOSE 8001
 # Run "uwsgi". uWSGI is a Web Server Gateway Interface (WSGI) server implementation that is typically used to run Python
 # web applications.
 CMD uwsgi --ini uwsgi.ini
+

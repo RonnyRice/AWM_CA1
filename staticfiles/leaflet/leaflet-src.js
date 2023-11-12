@@ -18,7 +18,7 @@
    */
 
   // @function extend(dest: Object, src?: Object): Object
-  // Merges the itineraryapp of the `src` object (or multiple objects) into `dest` object and returns the latter. Has an `L.extend` shortcut.
+  // Merges the itinerary of the `src` object (or multiple objects) into `dest` object and returns the latter. Has an `L.extend` shortcut.
   function extend(dest) {
   	var i, j, len, src;
 
@@ -31,7 +31,7 @@
   	return dest;
   }
 
-  // @function create(proto: Object, itineraryapp?: Object): Object
+  // @function create(proto: Object, itinerary?: Object): Object
   // Compatibility polyfill for [Object.create](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/create)
   var create = Object.create || (function () {
   	function F() {}
@@ -141,7 +141,7 @@
   }
 
   // @function setOptions(obj: Object, options: Object): Object
-  // Merges the given itineraryapp to the `options` of the `obj` object, returning the resulting options. See `Class options`. Has an `L.setOptions` shortcut.
+  // Merges the given itinerary to the `options` of the `obj` object, returning the resulting options. See `Class options`. Has an `L.setOptions` shortcut.
   function setOptions(obj, options) {
   	if (!Object.prototype.hasOwnProperty.call(obj, 'options')) {
   		obj.options = obj.options ? create(obj.options) : {};
@@ -287,7 +287,7 @@
   Class.extend = function (props) {
 
   	// @function extend(props: Object): Function
-  	// [Extends the current class](#class-inheritance) given the itineraryapp to be included.
+  	// [Extends the current class](#class-inheritance) given the itinerary to be included.
   	// Returns a Javascript function that is a class constructor (to be called with `new`).
   	var NewClass = function () {
 
@@ -314,7 +314,7 @@
   		}
   	}
 
-  	// mix static itineraryapp into the class
+  	// mix static itinerary into the class
   	if (props.statics) {
   		extend(NewClass, props.statics);
   		delete props.statics;
@@ -332,7 +332,7 @@
   		props.options = extend(create(proto.options), props.options);
   	}
 
-  	// mix given itineraryapp into the prototype
+  	// mix given itinerary into the prototype
   	extend(proto, props);
 
   	proto._initHooks = [];
@@ -357,7 +357,7 @@
   };
 
 
-  // @function include(itineraryapp: Object): this
+  // @function include(itinerary: Object): this
   // [Includes a mixin](#class-includes) into the current class.
   Class.include = function (props) {
   	extend(this.prototype, props);
@@ -568,7 +568,7 @@
   	// @method fire(type: String, data?: Object, propagate?: Boolean): this
   	// Fires an event of the specified type. You can optionally provide an data
   	// object — the first argument of the listener function will contain its
-  	// itineraryapp. The event can optionally be propagated to event parents.
+  	// itinerary. The event can optionally be propagated to event parents.
   	fire: function (type, data, propagate) {
   		if (!this.listens(type, propagate)) { return this; }
 
@@ -1571,7 +1571,7 @@
 
   	// @method wrapLatLng(latlng: LatLng): LatLng
   	// Returns a `LatLng` where lat and lng has been wrapped according to the
-  	// CRS's `wrapLat` and `wrapLng` itineraryapp, if they are outside the CRS's bounds.
+  	// CRS's `wrapLat` and `wrapLng` itinerary, if they are outside the CRS's bounds.
   	wrapLatLng: function (latlng) {
   		var lng = this.wrapLng ? wrapNum(latlng.lng, this.wrapLng, true) : latlng.lng,
   		    lat = this.wrapLat ? wrapNum(latlng.lat, this.wrapLat, true) : latlng.lat,
@@ -1698,7 +1698,7 @@
   // Creates a `Transformation` object with the given coefficients.
   function Transformation(a, b, c, d) {
   	if (isArray(a)) {
-  		// use array itineraryapp
+  		// use array itinerary
   		this._a = a[0];
   		this._b = a[1];
   		this._c = a[2];
@@ -1813,7 +1813,7 @@
    * @namespace Browser
    * @aka L.Browser
    *
-   * A namespace with static itineraryapp for browser/feature detection used by Leaflet internally.
+   * A namespace with static itinerary for browser/feature detection used by Leaflet internally.
    *
    * @example
    *
@@ -3981,7 +3981,7 @@
 
   	// @method wrapLatLng(latlng: LatLng): LatLng
   	// Returns a `LatLng` where `lat` and `lng` has been wrapped according to the
-  	// map's CRS's `wrapLat` and `wrapLng` itineraryapp, if they are outside the
+  	// map's CRS's `wrapLat` and `wrapLng` itinerary, if they are outside the
   	// CRS's bounds.
   	// By default this means longitude is wrapped around the dateline so its
   	// value is between -180 and +180 degrees.
@@ -7144,7 +7144,7 @@
    * no icon is specified. Points to the blue marker image distributed with Leaflet
    * releases.
    *
-   * In order to customize the default icon, just change the itineraryapp of `L.Icon.Default.prototype.options`
+   * In order to customize the default icon, just change the itinerary of `L.Icon.Default.prototype.options`
    * (which is a set of `Icon options`).
    *
    * If you want to _completely_ replace the default icon, override the
@@ -7201,7 +7201,7 @@
   /* @namespace Marker
    * @section Interaction handlers
    *
-   * Interaction handlers are itineraryapp of a marker instance that allow you to control interaction behavior in runtime, enabling or disabling certain features such as dragging (see `Handler` methods). Example:
+   * Interaction handlers are itinerary of a marker instance that allow you to control interaction behavior in runtime, enabling or disabling certain features such as dragging (see `Handler` methods). Example:
    *
    * ```js
    * marker.dragging.disable();
@@ -8600,10 +8600,10 @@
    * ```js
    * L.geoJSON(data, {
    * 	style: function (feature) {
-   * 		return {color: feature.itineraryapp.color};
+   * 		return {color: feature.itinerary.color};
    * 	}
    * }).bindPopup(function (layer) {
-   * 	return layer.feature.itineraryapp.description;
+   * 	return layer.feature.itinerary.description;
    * }).addTo(map);
    * ```
    */
@@ -13210,7 +13210,7 @@
 
   // @section Handlers
   //
-  // Map itineraryapp include interaction handlers that allow you to control
+  // Map itinerary include interaction handlers that allow you to control
   // interaction behavior in runtime, enabling or disabling certain features such
   // as dragging or touch zoom (see `Handler` methods). For example:
   //
