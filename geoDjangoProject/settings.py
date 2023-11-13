@@ -25,7 +25,7 @@ SECRET_KEY = "qk(t&0fh*7wo=x1f-8$^@#&mme$#e3hj4mrp2s-&-13@ty+g43"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['ronliquit.com']
 
 
 LOGIN_REDIRECT_URL = "home"
@@ -142,7 +142,7 @@ else:
 if DEPLOY_SECURE:
     DEBUG = False
     TEMPLATES[0]["OPTIONS"]["debug"] = False
-    ALLOWED_HOSTS = ['ronliquit.com',  'localhost']
+    ALLOWED_HOSTS = ['ronliquit.com',  '20.56.37.245']
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
 else:
