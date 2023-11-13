@@ -7,7 +7,7 @@ Continuous assignment 1 for AWM
 - website displays a list of itinerary events ordered by date-time on cards on the main panel
 - map displays when the event occurs and pop up titles as blue pins
 - Displays recently pointed locations as red pins
-- if geolocation is enabled map displays the users current location and coordinates
+- if geolocation is enabled map displays the users current location and coordinates of the user
 - A user can delete An entire plan or individual itinerary events
 - Has a login page for different users
 - Itinerary and Plan tables can scroll for overflow
