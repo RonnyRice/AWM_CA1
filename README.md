@@ -1,5 +1,8 @@
 # AWM_CA1
 Continuous assignment 1 for AWM 
+## website 
+https://ronliquit.com/ username =ron_trevor password=password123
+
 ### Basic functionality
 - User Can input many Event Plan on the side panel
 - Each event plan has a set of itinerary events that happen across the map
