@@ -187,7 +187,7 @@
                     });
 
                     // Add a marker for the current location
-                    var currentLocationMarker = L.marker([user_lat, user_lon], {icon: userLocationIcon})
+                    L.marker([user_lat, user_lon], {icon: userLocationIcon})
                         .addTo(detail.map)
                         .bindPopup('Current Location').openPopup();
                     detail.map.setView([user_lat, user_lon], 6);
@@ -221,10 +221,10 @@
 
             //display itinerary markers on page load
             {% for user_ItineraryEventsMaker in user_ItineraryEventsSelected %}
-                var itinerary_lon = {{ user_ItineraryEventsMaker.lon }}
-                var itinerary_lat = {{ user_ItineraryEventsMaker.lat }}
-                var marker = L.marker([itinerary_lat, itinerary_lon]).addTo(detail.map)
-                    .bindPopup('<b> {{ user_ItineraryEventsMaker.ItineraryEvent_title }} </b>').openPopup();
+                var itinerary_lon = {{ user_ItineraryEventsMaker.lon }};
+                var itinerary_lat = {{ user_ItineraryEventsMaker.lat }};
+                var marker = L.marker([itinerary_lat, itinerary_lon]).addTo(detail.map);
+                    marker.bindPopup('<b> {{ user_ItineraryEventsMaker.ItineraryEvent_title }} </b>').openPopup();
                 // Add a popup with the title
             {% endfor %}
 
