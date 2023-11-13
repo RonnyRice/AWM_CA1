@@ -204,6 +204,12 @@
                 html: '<i id="visited-icon" class="fa-solid fa-location-dot" style=" color: #f70202; width:25px; height: 41px; transform: scale(2,2); z-index: 335; outline: none;" ></i>'
             });
 
+             // custom itinerary marker
+            var itineraryIcon = L.divIcon({
+                className: 'custom-icon',
+                html: '<i id="visited-icon" class="fa-solid fa-location-dot" style=" color: dodgerblue; width:25px; height: 41px; transform: scale(2,2); z-index: 335; outline: none;" ></i>'
+            });
+
             //create itinarary markers
             detail.map.on('click', (event) => {
 
@@ -219,12 +225,13 @@
                 {% endif %}
             })
 
+
             //display itinerary markers on page load
             {% for user_ItineraryEventsMaker in user_ItineraryEventsSelected %}
                 var itinerary_lon = {{ user_ItineraryEventsMaker.lon }};
                 var itinerary_lat = {{ user_ItineraryEventsMaker.lat }};
-                var marker = L.marker([itinerary_lat, itinerary_lon]).addTo(detail.map);
-                    marker.bindPopup('<b> {{ user_ItineraryEventsMaker.ItineraryEvent_title }} </b>').openPopup();
+                var marker = L.marker([itinerary_lat, itinerary_lon], {icon: itineraryIcon}).addTo(detail.map)
+                    .bindPopup('<b> {{ user_ItineraryEventsMaker.ItineraryEvent_title }} </b>').openPopup();
                 // Add a popup with the title
             {% endfor %}
 
