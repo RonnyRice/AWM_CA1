@@ -14,6 +14,7 @@ Continuous assignment 1 for AWM
 - It creates, store and manipulate spatial data in PostgreSQL/PostGIS database.
 - It utilizes Boostrap for ease of development and user friendly design. This makes the application responsive to make usuable it on different screen sizes.
 - App was deployed on an ubuntu VM on Azure using docker, nginx and has HTTPS with the help of certbot for security.
+- Uses ajax for asynchronized calls
 
 
 ## Screen Shots of app
