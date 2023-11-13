@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.gis.db import models as gis_models
 from django.contrib.auth import get_user_model
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils.timezone import now
 
 defaultUserModel = get_user_model()
@@ -15,6 +17,15 @@ class User(models.Model):
 
     def __str__(self):
         return str(self.username)
+
+
+@receiver(post_save, sender=get_user_model())
+def manage_user_profile(sender, instance, created, **kwargs):
+    try:
+        my_profile = instance.profile
+        my_profile.save()
+    except Profile.DoesNotExist:
+        Profile.objects.create(user=instance, lon=10, lat=10)
 
 
 class Profile(models.Model):

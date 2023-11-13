@@ -5,23 +5,23 @@
 {% block title %}Create Itinerary{% endblock %}
 
 {% block content %}
-{% if user.is_authenticated %}
-    {% include "navbar.html" %}
-    <div id="main">
-    <br>
-      <div class="newItineraryContainer">
-          <h1> Create a new Itinerary</h1>
-          <br>
-          {% leaflet_map "yourmap" %}
+    {% if user.is_authenticated %}
+        {% include "navbar.html" %}
+        <div id="main">
+            <br>
+            <div class="newItineraryContainer">
+                <h1> Create a new Itinerary</h1>
+                <br>
+                {% leaflet_map "yourmap" %}
+
+            </div>
 
         </div>
 
-    </div>
 
-
-{% else %}
-  <p>You are not logged in</p>
-  <a href="{% url 'login' %}">Log In</a>
-{% endif %}
+    {% else %}
+        <p>You are not logged in</p>
+        <a href="{% url 'login' %}">Log In</a>
+    {% endif %}
 
 {% endblock %}

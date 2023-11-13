@@ -1,19 +1,53 @@
 
+
+html, body {
+    height: 100%;
+    margin: 0;
+}
+.loginWrapper{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 #main{
-    margin-top: 10vh;
-    min-height: 100vh;
+    height: 100vh;
+    margin: 0;
     width: auto;
     background-color: antiquewhite;
+    overflow: scroll;
+
 }
 
 .tile{
     background-color: white;
     border-radius: 20px;
     display: flex;
-    justify-content: center;
     padding: 1vw;
     align-items: center;
     flex-direction: column;
+    max-height: 1700px;
+    max-width: 1800px;
+    justify-content: center;
+
+}
+
+.plan-container{
+    overflow-x: hidden;
+    overflow-y: scroll;
+    max-height: 100vh;
+}
+
+.custom-card-container{
+    width: 100%;
+    min-height: 250px;
+    display: flex;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    display: -ms-flexbox;
+    display: flex;
+    margin-right: -15px;
+    margin-left: -15px;
 }
 
 .newItineraryContainer {
@@ -25,6 +59,23 @@
     margin: 1%;
     align-items: center;
     flex-direction: column;
+    -webkit-overflow-scrolling: touch;
+}
+
+/*to hide the scrollbars*/
+::-webkit-scrollbar {
+    display: none;
+}
+.custom-card{
+    min-width: 300px !important;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.custom-container{
+    border-width:2px;
+    border-radius: 5px;
+    border-color: bisque;
 }
 
 .custom_button{
@@ -42,7 +93,11 @@
  #specialbigmap {
         height: 800px;
     }
-
+.wrapper{
+    max-width: 400px;
+    max-height: 600px;
+    padding: 0 30px 70px 30px;
+}
  .icon-style{
      width: 10vw;
      height: 10vw;
@@ -53,7 +108,7 @@
  }
 
  .custom_border {
-     border-radius: 20px !important;
+     border-radius: 10px !important;
      border-color: bisque !important;
  }
 .itinerary-container { grid-area: itinerarylist; }
@@ -61,8 +116,9 @@
 .main-container { grid-area: main; }
 
 .grid-container {
-    padding: 20px;
+    padding: 5% 20px 20px 20px;
     width: 100%;
+    max-width: 1800px;
     height: 100%;
     display: grid;
     grid-gap: 10px;
@@ -72,3 +128,13 @@
     'map map map map itinerarylist itinerarylist'
     'main main main main itinerarylist itinerarylist';
 }
+
+@media (max-width: 850px) {
+    .grid-container{
+       display: flex;
+        flex-direction: column;
+        padding: 8vh 20px 20px 20px;
+
+    }
+}
+

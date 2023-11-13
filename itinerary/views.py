@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.gis.geos import Point
 
@@ -16,13 +18,16 @@ def index(request):
     user_ItineraryPlan = []
 
     user_ItineraryPlan = ItineraryPlan.objects.filter(user=request.user.id)
-    if 'user_ItineraryPlanSelected_ID' in request.session:
-        user_ItineraryPlanSelected = user_ItineraryPlan.get(
-            ItineraryPlan_id=int(request.session["user_ItineraryPlanSelected_ID"]))
+    if 'user_ItineraryPlanSelected_ID' in request.session and user_ItineraryPlan:
+        try:
+            user_ItineraryPlanSelected = user_ItineraryPlan.get(
+                ItineraryPlan_id=int(request.session["user_ItineraryPlanSelected_ID"]))
 
-        user_ItineraryEventsSelected = ItineraryEvent.objects.filter(
-            ItineraryPlan_id=int(request.session["user_ItineraryPlanSelected_ID"]))
-
+            user_ItineraryEventsSelected = ItineraryEvent.objects.filter(
+                ItineraryPlan_id=int(request.session["user_ItineraryPlanSelected_ID"]))
+        except Exception as e:
+            user_ItineraryPlanSelected = None
+            user_ItineraryEventsSelected = None
     return render(request, 'home.html', {"user_ItineraryPlan": user_ItineraryPlan,
                                          "user_ItineraryPlanSelected": user_ItineraryPlanSelected,
                                          "user_ItineraryEventsSelected": user_ItineraryEventsSelected})
@@ -50,11 +55,14 @@ def addItineraryEvent(request):
         try:
             lon = float(request.POST["itineraryEvent_Longitude"])
             lat = float(request.POST["itineraryEvent_Latitude"])
+            currentDateTime = request.POST["itineraryEvent_DateTime"]
+            if not currentDateTime:
+                currentDateTime = datetime.now()
             ItineraryPlanEvent_models = ItineraryEvent(None,
                                                        request.session["user_ItineraryPlanSelected_ID"],
                                                        request.POST["itineraryEvent_name"],
                                                        request.POST["itineraryEvent_desc"],
-                                                       request.POST["itineraryEvent_DateTime"],
+                                                       currentDateTime,
                                                        lon,
                                                        lat,
                                                        Point(lon, lat, srid=4326))
@@ -94,5 +102,24 @@ def updateUserLocation(request):
 
 
 @login_required
-def newItineraryView(request):
-    return render(request, "newitinerary.html")
+def deleteItineraryEvent(request):
+    if request.POST:
+        try:
+            ItineraryEvent.objects.filter(ItineraryEvent_id=int(request.POST['ItineraryEvent_id'])).delete()
+            return redirect('home')
+        except Exception as e:
+            return render(request, 'Error.html', {'error_message': str(e)}, status=404)
+
+    return render(request, "home.html")
+
+@login_required
+def deleteItineraryPlan(request):
+    if request.POST:
+        try:
+            ItineraryPlan.objects.filter(ItineraryPlan_id=int(request.POST['ItineraryPlan_id'])).delete()
+            return redirect('home')
+
+        except Exception as e:
+            return render(request, 'Error.html', {'error_message': str(e)}, status=404)
+
+    return render(request, "home.html")

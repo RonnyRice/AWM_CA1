@@ -1,4 +1,3 @@
-
 <!-- templates/home.html-->
 {% extends "base.html" %}
 {% load leaflet_tags %}
@@ -7,124 +6,191 @@
 
 {% block content %}
 
-{% if user.is_authenticated %}
-    {% include "navbar.html" %}
-    {% include "modals.html" %}
+    {% if user.is_authenticated %}
+        {% include "navbar.html" %}
+        {% include "modals.html" %}
 
-    <div id="main">
-        <div class="grid-container">
-            <div class="map-container">
-                 <div class="tile">
-                {% leaflet_map "yourmap" %}
-                     <p><span>Current Latitude:</span> <span>Current Longitude:</span></p>
+        <div id="main">
+            <div class="grid-container">
+                <div class="map-container">
+                    <div class="tile">
+                        {% leaflet_map "yourmap" %}
+                        <p id="UserCoordinates"></p>
+                    </div>
                 </div>
-            </div>
-            <div class="main-container">
-                <div class="tile">
-                    <h3>Itinerary</h3>
-                    {% if user_ItineraryPlanSelected %}
-                        <div>
-                        <h2>
-                            {{ user_ItineraryPlanSelected.ItineraryPlan_title }}
-                        </h2>
-                        <p>{{ user_ItineraryPlanSelected.ItineraryPlan_description }}</p>
+                <div class="main-container">
+                    <div class="tile">
+                        {% if user_ItineraryPlanSelected %}
+                            <h2>
+                                {{ user_ItineraryPlanSelected.ItineraryPlan_title }}
+                            </h2>
+                            <div>
+                                <p>{{ user_ItineraryPlanSelected.ItineraryPlan_description }}</p>
+                                <br>
+                            </div>
+                            {% if not user_ItineraryEventsSelected or user_ItineraryEventsSelected|length == 0 %}
+                                <div class="card text-center custom_border">
+                                    <div class="card-body custom_border">
+                                        <h5 class="card-title">Add An Itinerary</h5>
 
-                        </div>
-                        <div class="card-deck">
-                    	{% for user_ItineraryEvents in user_ItineraryEventsSelected %}
-                             <div class="card" id="card-{{ user_ItineraryEvents.id }}">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ user_ItineraryEvents.ItineraryEvent_title }}</h5>
-                                    <p class="card-text">{{ user_ItineraryEvents.itineraryEvent_description }}</p>
-                                </div>
-                              <div class="card-footer">
-                                    <p class="card-text"><small class="text-muted">{{ user_ItineraryEvents.itineraryEvent_datetime }}</small></p>
+                                        <p class="card-text"> Click on the map once you added and selected an
+                                            itinerary plan</p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor" class="bi bi-airplane-engines icon-style"
+                                             viewBox="0 0 16 16">
+                                            <path d="M8 0c-.787 0-1.292.592-1.572 1.151A4.347 4.347 0 0 0 6 3v3.691l-2 1V7.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.191l-1.17.585A1.5 1.5 0 0 0 0 10.618V12a.5.5 0 0 0 .582.493l1.631-.272.313.937a.5.5 0 0 0 .948 0l.405-1.214 2.21-.369.375 2.253-1.318 1.318A.5.5 0 0 0 5.5 16h5a.5.5 0 0 0 .354-.854l-1.318-1.318.375-2.253 2.21.369.405 1.214a.5.5 0 0 0 .948 0l.313-.937 1.63.272A.5.5 0 0 0 16 12v-1.382a1.5 1.5 0 0 0-.83-1.342L14 8.691V7.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v.191l-2-1V3c0-.568-.14-1.271-.428-1.849C9.292.591 8.787 0 8 0ZM7 3c0-.432.11-.979.322-1.401C7.542 1.159 7.787 1 8 1c.213 0 .458.158.678.599C8.889 2.02 9 2.569 9 3v4a.5.5 0 0 0 .276.447l5.448 2.724a.5.5 0 0 1 .276.447v.792l-5.418-.903a.5.5 0 0 0-.575.41l-.5 3a.5.5 0 0 0 .14.437l.646.646H6.707l.647-.646a.5.5 0 0 0 .14-.436l-.5-3a.5.5 0 0 0-.576-.411L1 11.41v-.792a.5.5 0 0 1 .276-.447l5.448-2.724A.5.5 0 0 0 7 7V3Z"></path>
+                                        </svg>
                                     </div>
-                             </div>
-                    	{% endfor %}
-                        </div>
-                        {% else %}
-                        <div class="card text-center custom_border">
-                    <div class="card-body custom_border">
-                        <h5 class="card-title">Create an itinerary</h5>
-                        <p class="card-text">Create an itinerary plan or click existing plans</p>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="bi bi-suitcase2-fill icon-style" viewBox="0 0 16 16">
-  <path d="M6.5 0a.5.5 0 0 0-.5.5V3H4.5A1.5 1.5 0 0 0 3 4.5v9a1.5 1.5 0 0 0 1.003 1.416A1 1 0 1 0 6 15h4a1 1 0 1 0 1.996-.084A1.5 1.5 0 0 0 13 13.5v-9A1.5 1.5 0 0 0 11.5 3H10V.5a.5.5 0 0 0-.5-.5h-3ZM9 3H7V1h2v2ZM4 7V6h8v1H4Z"></path>
-</svg>
-                    </div>
-                    </div>
-                    {% endif %}
-                </div>
-            </div>
-            <div class="itinerary-container">
-                 <div class="tile">
-                     <h3>Holiday plan</h3>
-                    <div class="card text-center custom_border">
-                    <div class="card-body">
+                                </div>
+                            {% else %}
+                                <div class="custom-card-container">
 
-                        <div class="list-group" id="list-tab" role="tablist">
-                        {% for listItem in user_ItineraryPlan %}
-                            <a class="list-group-item list-group-item-action selected-plan" id="{{ listItem.ItineraryPlan_title }}" data-toggle="list"  data-value ="{{ listItem.ItineraryPlan_id}}" href="#list-home" role="tab" aria-controls="home">{{ listItem.ItineraryPlan_title}} ID:{{ listItem.ItineraryPlan_id}} </a>
-                        {% endfor %}
+                                    {% for user_ItineraryEvents in user_ItineraryEventsSelected %}
+                                        <div class="card custom-card"
+                                             id="card-{{ user_ItineraryEvents.ItineraryEvent_id }}">
+                                            <form action="{% url 'deleteItineraryEvent' %}" method="post">
+                                                {% csrf_token %}
+                                                <div class="card-body">
+                                                    <h5 class="card-title">{{ user_ItineraryEvents.ItineraryEvent_title }}</h5>
+                                                    <p class="card-text">{{ user_ItineraryEvents.itineraryEvent_description }}</p>
+                                                    <input name="ItineraryEvent_id" type="hidden"
+                                                           value="{{ user_ItineraryEvents.ItineraryEvent_id }}">
+                                                    <button class=" btn btn-link" type="submit"><small
+                                                            class="text-muted">remove</small>
+                                                    </button>
+                                                </div>
+                                            </form>
+                                            <div class="card-footer">
+                                                <p class="card-text"><small
+                                                        class="text-muted">{{ user_ItineraryEvents.itineraryEvent_datetime }}</small>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+
+                            {% endif %}
+
+                        {% else %}
+                            <h3>Itinerary</h3>
+                            <div class="card text-center custom_border">
+                                <div class="card-body custom_border">
+                                    <h5 class="card-title">Create an itinerary</h5>
+                                    <p class="card-text">Create an itinerary plan or click existing plans</p>
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor"
+                                         class="bi bi-suitcase2-fill icon-style" viewBox="0 0 16 16">
+                                        <path d="M6.5 0a.5.5 0 0 0-.5.5V3H4.5A1.5 1.5 0 0 0 3 4.5v9a1.5 1.5 0 0 0 1.003 1.416A1 1 0 1 0 6 15h4a1 1 0 1 0 1.996-.084A1.5 1.5 0 0 0 13 13.5v-9A1.5 1.5 0 0 0 11.5 3H10V.5a.5.5 0 0 0-.5-.5h-3ZM9 3H7V1h2v2ZM4 7V6h8v1H4Z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="itinerary-container">
+                    <div class="tile tile-constraint">
+                        <h3>Holiday plan</h3>
+                        <div class="card text-center plan-container mb-1 border-0">
+                            <div class="card-body">
+
+                                <div class="list-group" id="list-tab" role="tablist">
+                                    {% for listItem in user_ItineraryPlan %}
+                                        <form action="{% url 'deleteItineraryPlan' %}" method="post"
+                                              style="margin-bottom: 10px;">
+                                            {% csrf_token %}
+                                            <a class="list-group-item custom_border list-group-item-action selected-plan"
+                                               id="{{ listItem.ItineraryPlan_title }}" data-toggle="list"
+                                               data-value="{{ listItem.ItineraryPlan_id }}" href="#list-home" role="tab"
+                                               aria-controls="home">{{ listItem.ItineraryPlan_title }}</a>
+                                            <input name="ItineraryPlan_id" type="hidden"
+                                                   value="{{ listItem.ItineraryPlan_id }}">
+                                            <button type="submit"
+                                                    class="btn btn-block list-group-item-action  pb-0 pt-0"><small
+                                                    class="text-muted">remove</small></button>
+                                        </form>
+                                    {% endfor %}
+                                </div>
+                                <br>
+
+                            </div>
                         </div>
-                            <br>
-                        <button type="button" class=" custom_button btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                        <button type="button" class=" custom_button btn btn-primary" data-toggle="modal"
+                                data-target="#exampleModal">
                             Add Plan
                         </button>
-                    </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-{% else %}
-  <p>You are not logged in</p>
-  <a href="{% url 'login' %}">Log In</a>
-{% endif %}
-     <script>
-    window.addEventListener("map:init", function (e) {
-        // our map
-        var detail = e.detail;
+    {% else %}
+        <div class="loginWrapper">
+            <div class="wrapper shadow bg-white rounded">
+                <svg viewBox="0 0 500 200">
+                    <path d="M 0 50 C 150 150 300 0 500 80 L 500 0 L 0 0" fill="rgb(57, 27, 112)"></path>
+                    <path d="M 0 50 C 150 150 330 -30 500 50 L 500 0 L 0 0" fill="#0E7452" opacity="0.8"></path>
+                    <path d="M 0 50 C 215 150 250 0 500 100 L 500 0 L 0 0" fill="#0E7452" opacity="0.5"></path>
+                </svg>
+                <h1>Adventify!</h1>
+                <br>
+                <p>You are not logged in</p>
+                <a href="{% url 'login' %}">Log In</a>
+            </div>
 
-        if ("geolocation" in navigator) {
-                navigator.geolocation.getCurrentPosition(function (position){
+        </div>
+    {% endif %}
+    <script>
+
+
+        window.addEventListener("map:init", function (e) {
+            // our map
+            var detail = e.detail;
+
+            //proivded that geolocation services ar eon
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function (position) {
                     var user_lat = position.coords.latitude;
                     var user_lon = position.coords.longitude;
 
+                    // custom user tab
                     var userLocationIcon = L.divIcon({
                         className: 'custom-icon',
                         html: '<i class="fa fa-circle-user" style="width:25px; height: 41px; transform: scale(2,2)"></i>'
                     });
 
-                    $(document).ready(function() {
-                    // Make a POST request using jQuery AJAX to update user location given location permissions
-                 let csrfToken = $('[name=csrfmiddlewaretoken]').val();
-/*
-                     $.ajax({
-                    type: 'POST',
-                    url: '{% url "updateUserLocation" %}',
-                    data: {
-                        'user_lat': user_lat,
-                        'user_lon': user_lon,
-                        'csrfmiddlewaretoken': csrfToken
-                    },
-                    success: function(response) {
-                        location.reload();
-                    console.log("ajax function called for updating location");
-                    },
-                    error: function(error) {
-                        console.log('Error In ajax function updating location ');
+                    //Will display current user coordinates at #Usercoordinates tag
+                    if (user_lat && user_lon) {
+                        $('<span>').text('Current Latitude is: ' + user_lat).appendTo('#UserCoordinates');
+                        $('<span>').text(' Current Longitude is: ' + user_lon).appendTo('#UserCoordinates');
                     }
-                });
-                */
+
+
+                    $(document).ready(function () {
+                        // Make a POST request using jQuery AJAX to update user location given location permissions
+                        let csrfToken = $('[name=csrfmiddlewaretoken]').val();
+
+                        $.ajax({
+                            type: 'POST',
+                            url: '{% url "updateUserLocation" %}',
+                            data: {
+                                'user_lat': user_lat,
+                                'user_lon': user_lon,
+                                'csrfmiddlewaretoken': csrfToken
+                            },
+                            success: function (response) {
+                                console.log("ajax function called for updating location");
+                            },
+                            error: function (error) {
+                                console.log('Error In ajax function updating location ');
+                            }
+                        });
+
                     });
 
-                 // Add a marker for the current location
-                var currentLocationMarker = L.marker([user_lat, user_lon], { icon: userLocationIcon })
-                .addTo(detail.map)
-                .bindPopup('Current Location').openPopup();
-                detail.map.setView([user_lat, user_lon], 6);
+                    // Add a marker for the current location
+                    var currentLocationMarker = L.marker([user_lat, user_lon], {icon: userLocationIcon})
+                        .addTo(detail.map)
+                        .bindPopup('Current Location').openPopup();
+                    detail.map.setView([user_lat, user_lon], 6);
                 });
 
 
@@ -132,34 +198,40 @@
                 alert("Geolocation is not supported by this browser.");
             }
 
-         var visitedLocationIcon = L.divIcon({
-                        className: 'custom-icon',
-                        html: '<i id="visited-icon" class="fa-solid fa-location-dot" style=" color: #f70202; width:25px; height: 41px; transform: scale(2,2); z-index: 335; outline: none;" ></i>'
-                    });
+            // custom drop on click marker
+            var visitedLocationIcon = L.divIcon({
+                className: 'custom-icon',
+                html: '<i id="visited-icon" class="fa-solid fa-location-dot" style=" color: #f70202; width:25px; height: 41px; transform: scale(2,2); z-index: 335; outline: none;" ></i>'
+            });
 
-        //create itinarary markers
-        detail.map.on('click', (event) =>{
+            //create itinarary markers
+            detail.map.on('click', (event) => {
 
-            $('#visited-icon').remove();
+                $('#visited-icon').remove();
 
-            var visited = L.marker([event.latlng.lat, event.latlng.lng], {icon :visitedLocationIcon }).addTo(detail.map)
-            $('#createItineraryEvent').modal('toggle')
-            $('#itineraryEvent_Latitude').val(event.latlng.lat)
-            $('#itineraryEvent_Longitude').val(event.latlng.lng)
-        })
+                var visited = L.marker([event.latlng.lat, event.latlng.lng], {icon: visitedLocationIcon}).addTo(detail.map)
 
-        //display itinerary markers on page load
-        {% for user_ItineraryEventsMaker in user_ItineraryEventsSelected %}
-            var itinerary_lon = {{ user_ItineraryEventsMaker.lon }}
-            var itinerary_lat = {{ user_ItineraryEventsMaker.lat }}
-            var marker = L.marker([itinerary_lat,itinerary_lon ]).addTo(detail.map)
-                .bindPopup('<b> {{ user_ItineraryEventsMaker.ItineraryEvent_title }} </b>').openPopup();  // Add a popup with the title
-    {% endfor %}
+                // if plan is selected and exists then allow modal popup
+                {% if user_ItineraryPlan|length != 0 and user_ItineraryPlanSelected %}
+                    $('#createItineraryEvent').modal('toggle')
+                    $('#itineraryEvent_Latitude').val(event.latlng.lat)
+                    $('#itineraryEvent_Longitude').val(event.latlng.lng)
+                {% endif %}
+            })
 
-    }, false);
+            //display itinerary markers on page load
+            {% for user_ItineraryEventsMaker in user_ItineraryEventsSelected %}
+                var itinerary_lon = {{ user_ItineraryEventsMaker.lon }}
+                var itinerary_lat = {{ user_ItineraryEventsMaker.lat }}
+                var marker = L.marker([itinerary_lat, itinerary_lon]).addTo(detail.map)
+                    .bindPopup('<b> {{ user_ItineraryEventsMaker.ItineraryEvent_title }} </b>').openPopup();
+                // Add a popup with the title
+            {% endfor %}
 
-$(document).ready(function() {
-            $('.selected-plan').click(function(event) {
+        }, false);
+
+        $(document).ready(function () {
+            $('.selected-plan').click(function (event) {
                 // Prevent the default link behavior
                 event.preventDefault();
 
@@ -177,15 +249,15 @@ $(document).ready(function() {
                         'itinerary_link_value': linkValue,
                         'csrfmiddlewaretoken': csrfToken
                     },
-                    success: function(response) {
+                    success: function (response) {
                         location.reload();
-                    console.log("ajax function called for selecting plan");
+                        console.log("ajax function called for selecting plan");
                     },
-                    error: function(error) {
-                        alert('Error In selecting Itinerary plan' );
+                    error: function (error) {
+                        alert('Error In selecting Itinerary plan');
                     }
                 });
             });
         });
-</script>
+    </script>
 {% endblock %}

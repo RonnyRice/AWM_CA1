@@ -142,7 +142,7 @@ else:
 if DEPLOY_SECURE:
     DEBUG = False
     TEMPLATES[0]["OPTIONS"]["debug"] = False
-    ALLOWED_HOSTS = ['ronliquit.com',  '20.56.37.245']
+    ALLOWED_HOSTS = ['ronliquit.com',  '20.56.37.245', 'localhost']
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
 else:

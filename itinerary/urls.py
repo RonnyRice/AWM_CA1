@@ -9,6 +9,9 @@ urlpatterns = [
     path("selectItineraryEvent/", views.selectItineraryEvent, name="selectItineraryEvent"),
     path("addItineraryEvent/", views.addItineraryEvent, name="addItineraryEvent"),
     path("updateUserLocation/", views.updateUserLocation, name="updateUserLocation"),
-
+    path("deleteItineraryEvent/", views.deleteItineraryEvent, name="deleteItineraryEvent"),
+    path("deleteItineraryPlan/", views.deleteItineraryPlan, name="deleteItineraryPlan"),
 ]
+
+ALLOWED_HOSTS = ['*']
 
