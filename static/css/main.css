@@ -32,6 +32,12 @@ html, body {
 
 }
 
+.custom-card-footer{
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+}
+
 .plan-container{
     overflow-x: hidden;
     overflow-y: scroll;
