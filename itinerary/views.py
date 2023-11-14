@@ -24,7 +24,7 @@ def index(request):
                 ItineraryPlan_id=int(request.session["user_ItineraryPlanSelected_ID"]))
 
             user_ItineraryEventsSelected = ItineraryEvent.objects.filter(
-                ItineraryPlan_id=int(request.session["user_ItineraryPlanSelected_ID"]))
+                ItineraryPlan_id=int(request.session["user_ItineraryPlanSelected_ID"])).order_by('itineraryEvent_datetime')
         except Exception as e:
             user_ItineraryPlanSelected = None
             user_ItineraryEventsSelected = None
