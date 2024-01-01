@@ -28,6 +28,7 @@ def manage_user_profile(sender, instance, created, **kwargs):
         Profile.objects.create(user=instance, lon=10, lat=10)
 
 
+# profile config stores last recorded location and user that has nullable values
 class Profile(models.Model):
     user = models.OneToOneField(
         get_user_model(),
@@ -43,6 +44,11 @@ class Profile(models.Model):
         return str(self.lon), str(self.lat)
 
 
+# Itinerary plan belongs to the user
+# Uses an incrementing int primary key
+# Uses the "Default title" for null values
+# has the user as foreign key indicating ownership and maintaining consistency
+# sharedStatus is default set to False
 class ItineraryPlan(models.Model):
     ItineraryPlan_id = models.AutoField(primary_key=True)
     ItineraryPlan_title = models.CharField(max_length=100, default="Default title")
@@ -51,6 +57,11 @@ class ItineraryPlan(models.Model):
     sharedStatus = models.BooleanField(default=False)
 
 
+# uses an incrementing primary key
+# has the Itinerary Plan as a foreign key indicating that the events list belong to the plan
+# has a default value for event title "Default title" for null values
+# Date time is set default as now incase no value was found.
+# event stores the longitude and latitude of the event used for the leaflet markers
 class ItineraryEvent(models.Model):
     ItineraryEvent_id = models.AutoField(primary_key=True)
     ItineraryPlan_id = models.ForeignKey(ItineraryPlan, on_delete=models.CASCADE)

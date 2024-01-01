@@ -3,6 +3,8 @@ from django.views.generic import TemplateView
 
 from . import views
 
+
+# URLS for the itinerary app
 urlpatterns = [
     path("", views.index, name="home"),
     path("addItinerary/", views.addItinerary, name="addItinerary"),

@@ -132,9 +132,11 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static")
 ]
 
+# Use DEPLOY_SECURE set to true to deploy in prod
 DEPLOY_SECURE = True
 TEST_LOCALLY = False
 
+# If test locally is True use the databased specified in my machine else use the wmap_postgis image
 if TEST_LOCALLY:
     DATABASES["default"]["HOST"] = "localhost"
     DATABASES["default"]["PORT"] = "25432"
@@ -143,7 +145,7 @@ else:
     DATABASES["default"]["PORT"] = "5432"
     DEPLOY_SECURE = True
 
-# Set DEPLOY_SECURE to True only for LIVE deployment
+# Set DEPLOY_SECURE to True only for LIVE deployment with csrf on, and allow host only as shown else uset debug to true and csrf off
 if DEPLOY_SECURE:
     DEBUG = False
     TEMPLATES[0]["OPTIONS"]["debug"] = False
@@ -193,7 +195,7 @@ USE_TZ = True
 
 CORS_ORIGIN_ALLOW_ALL= True
 
-# PWA
+# PWA application settings used to create a manifest file
 
 PWA_APP_DEBUG_MODE = False
 PWA_APP_NAME = 'Adventify'
@@ -206,6 +208,8 @@ PWA_APP_ORIENTATION = 'any'
 PWA_APP_START_URL = '/'
 PWA_APP_STATUS_BAR_COLOR = 'default'
 PWA_OFFLINE_PAGE = '/offline/'
+
+# PWA icon at least 512x512
 PWA_APP_ICONS = [
     {
         'src': './static/images/adventify-512-512.png',
@@ -213,6 +217,7 @@ PWA_APP_ICONS = [
         'purpose': 'any maskable'
     }
 ]
+# PWA icon for apple
 PWA_APP_ICONS_APPLE = [
     {
         'src': './static/images/adventify-512-512.png',

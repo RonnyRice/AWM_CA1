@@ -8,6 +8,7 @@ from itinerary.models import ItineraryPlan, ItineraryEvent
 from .serializer import ItineraryPlanSerializer, ItineraryEventSerializer
 
 
+#optional views for REST API
 class listItinerary(generics.ListAPIView):
     queryset = ItineraryPlan.objects.all()
     serializer_class = ItineraryPlanSerializer
