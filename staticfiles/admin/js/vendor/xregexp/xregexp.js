@@ -413,7 +413,7 @@ module.exports = function(XRegExp) {
      * - Adds the `XRegExp.addUnicodeData` method used by other addons to provide character data.
      *
      * Unicode Base relies on externally provided Unicode character data. Official addons are
-     * available to provide data for Unicode categories, scripts, blocks, and itinerary.
+     * available to provide data for Unicode categories, scripts, blocks, and properties.
      *
      * @requires XRegExp
      */
@@ -580,7 +580,7 @@ module.exports = function(XRegExp) {
      * Adds to the list of Unicode tokens that XRegExp regexes can match via `\p` or `\P`.
      *
      * @memberOf XRegExp
-     * @param {Array} data Objects with named character ranges. Each object may have itinerary
+     * @param {Array} data Objects with named character ranges. Each object may have properties
      *   `name`, `alias`, `isBmpLast`, `inverseOf`, `bmp`, and `astral`. All but `name` are
      *   optional, although one of `bmp` or `astral` is required (unless `inverseOf` is set). If
      *   `astral` is absent, the `bmp` data is used for BMP and astral modes. If `bmp` is absent,
@@ -2028,8 +2028,8 @@ module.exports = function(XRegExp) {
     'use strict';
 
     /**
-     * Adds itinerary to meet the UTS #18 Level 1 RL1.2 requirements for Unicode regex support. See
-     * <http://unicode.org/reports/tr18/#RL1.2>. Following are definitions of these itinerary from
+     * Adds properties to meet the UTS #18 Level 1 RL1.2 requirements for Unicode regex support. See
+     * <http://unicode.org/reports/tr18/#RL1.2>. Following are definitions of these properties from
      * UAX #44 <http://unicode.org/reports/tr44/>:
      *
      * - Alphabetic
@@ -2055,7 +2055,7 @@ module.exports = function(XRegExp) {
      *   Spaces, separator characters and other control characters which should be treated by
      *   programming languages as "white space" for the purpose of parsing elements.
      *
-     * The itinerary ASCII, Any, and Assigned are also included but are not defined in UAX #44. UTS
+     * The properties ASCII, Any, and Assigned are also included but are not defined in UAX #44. UTS
      * #18 RL1.2 additionally requires support for Unicode scripts and general categories. These are
      * included in XRegExp's Unicode Categories and Unicode Scripts addons.
      *
@@ -2720,7 +2720,7 @@ require('./addons/matchrecursive')(XRegExp);
 require('./addons/unicode-base')(XRegExp);
 require('./addons/unicode-blocks')(XRegExp);
 require('./addons/unicode-categories')(XRegExp);
-require('./addons/unicode-itinerary')(XRegExp);
+require('./addons/unicode-properties')(XRegExp);
 require('./addons/unicode-scripts')(XRegExp);
 
 module.exports = XRegExp;
@@ -2788,8 +2788,8 @@ var hasFlagsProp = /x/.flags !== undefined;
 var toString = {}.toString;
 
 function hasNativeFlag(flag) {
-    // Can't check based on the presence of itinerary/getters since browsers might support such
-    // itinerary even when they don't support the corresponding flag in regex construction (tested
+    // Can't check based on the presence of properties/getters since browsers might support such
+    // properties even when they don't support the corresponding flag in regex construction (tested
     // in Chrome 48, where `'unicode' in /x/` is true but trying to construct a regex with flag `u`
     // throws an error)
     var isSupported = true;
@@ -2816,7 +2816,7 @@ var registeredFlags = {
 };
 
 /**
- * Attaches extended data and `XRegExp.prototype` itinerary to a regex object.
+ * Attaches extended data and `XRegExp.prototype` properties to a regex object.
  *
  * @private
  * @param {RegExp} regex Regex to augment.
@@ -2825,7 +2825,7 @@ var registeredFlags = {
  * @param {String} xFlags XRegExp flags used to generate `regex`, or `null` if N/A.
  * @param {Boolean} [isInternalOnly=false] Whether the regex will be used only for internal
  *   operations, and never exposed to users. For internal-only regexes, we can improve perf by
- *   skipping some operations like attaching `XRegExp.prototype` itinerary.
+ *   skipping some operations like attaching `XRegExp.prototype` properties.
  * @returns {RegExp} Augmented regex.
  */
 function augment(regex, captureNames, xSource, xFlags, isInternalOnly) {
@@ -2871,19 +2871,19 @@ function clipDuplicates(str) {
 
 /**
  * Copies a regex object while preserving extended data and augmenting with `XRegExp.prototype`
- * itinerary. The copy has a fresh `lastIndex` property (set to zero). Allows adding and removing
+ * properties. The copy has a fresh `lastIndex` property (set to zero). Allows adding and removing
  * flags g and y while copying the regex.
  *
  * @private
  * @param {RegExp} regex Regex to copy.
- * @param {Object} [options] Options object with optional itinerary:
+ * @param {Object} [options] Options object with optional properties:
  *   - `addG` {Boolean} Add flag g while copying the regex.
  *   - `addY` {Boolean} Add flag y while copying the regex.
  *   - `removeG` {Boolean} Remove flag g while copying the regex.
  *   - `removeY` {Boolean} Remove flag y while copying the regex.
  *   - `isInternalOnly` {Boolean} Whether the copied regex will be used only for internal
  *     operations, and never exposed to users. For internal-only regexes, we can improve perf by
- *     skipping some operations like attaching `XRegExp.prototype` itinerary.
+ *     skipping some operations like attaching `XRegExp.prototype` properties.
  *   - `source` {String} Overrides `<regex>.source`, for special cases.
  * @returns {RegExp} Copy of the provided regex, possibly with modified flags.
  */
@@ -2926,7 +2926,7 @@ function copyRegex(regex, options) {
         }
     }
 
-    // Augment with `XRegExp.prototype` itinerary, but use the native `RegExp` constructor to avoid
+    // Augment with `XRegExp.prototype` properties, but use the native `RegExp` constructor to avoid
     // searching for special tokens. That would be wrong for regexes constructed by `RegExp`, and
     // unnecessary for regexes constructed by `XRegExp` because the regex has already undergone the
     // translation to native regex syntax
@@ -3096,7 +3096,7 @@ function pad4(str) {
  * @private
  * @param {String} pattern Regex pattern, possibly with a leading mode modifier.
  * @param {String} flags Any combination of flags.
- * @returns {Object} Object with itinerary `pattern` and `flags`.
+ * @returns {Object} Object with properties `pattern` and `flags`.
  */
 function prepareFlags(pattern, flags) {
     var i;
@@ -3174,7 +3174,7 @@ function registerFlag(flag) {
  * @param {Number} pos Position to search for tokens within `pattern`.
  * @param {Number} scope Regex scope to apply: 'default' or 'class'.
  * @param {Object} context Context object to use for token handler functions.
- * @returns {Object} Object with itinerary `matchLength`, `output`, and `reparse`; or `null`.
+ * @returns {Object} Object with properties `matchLength`, `output`, and `reparse`; or `null`.
  */
 function runTokens(pattern, flags, pos, scope, context) {
     var i = tokens.length;
@@ -3288,8 +3288,8 @@ function toObject(value) {
  *          (?<day>   [0-9]{2} )     # day   ', 'x');
  *
  * // Providing a regex object copies it. Native regexes are recompiled using native (not XRegExp)
- * // syntax. Copies maintain extended data, are augmented with `XRegExp.prototype` itinerary, and
- * // have fresh `lastIndex` itinerary (set to zero).
+ * // syntax. Copies maintain extended data, are augmented with `XRegExp.prototype` properties, and
+ * // have fresh `lastIndex` properties (set to zero).
  * XRegExp(/regex/);
  */
 function XRegExp(pattern, flags) {
@@ -3384,7 +3384,7 @@ function XRegExp(pattern, flags) {
 XRegExp.prototype = new RegExp();
 
 // ==--------------------------==
-// Public itinerary
+// Public properties
 // ==--------------------------==
 
 /**
@@ -3416,13 +3416,13 @@ XRegExp._pad4 = pad4;
  * @param {RegExp} regex Regex object that matches the new token.
  * @param {Function} handler Function that returns a new pattern string (using native regex syntax)
  *   to replace the matched token within all future XRegExp regexes. Has access to persistent
- *   itinerary of the regex being built, through `this`. Invoked with three arguments:
- *   - The match array, with named backreference itinerary.
+ *   properties of the regex being built, through `this`. Invoked with three arguments:
+ *   - The match array, with named backreference properties.
  *   - The regex scope where the match was found: 'default' or 'class'.
  *   - The flags used by the regex, including any flags in a leading mode modifier.
  *   The handler function becomes part of the XRegExp construction process, so be careful not to
  *   construct XRegExps within the function or you will trigger infinite recursion.
- * @param {Object} [options] Options object with optional itinerary:
+ * @param {Object} [options] Options object with optional properties:
  *   - `scope` {String} Scope where the token applies: 'default', 'class', or 'all'.
  *   - `flag` {String} Single-character flag that triggers the token. This also registers the
  *     flag, which prevents XRegExp from throwing an 'unknown flag' error when the flag is used.
@@ -3544,7 +3544,7 @@ XRegExp.escape = function(str) {
 
 /**
  * Executes a regex search in a specified string. Returns a match array or `null`. If the provided
- * regex uses named capture, named backreference itinerary are included on the match array.
+ * regex uses named capture, named backreference properties are included on the match array.
  * Optional `pos` and `sticky` arguments specify the search start position, and whether the match
  * must start at the specified position only. The `lastIndex` property of the provided regex is not
  * used, but is updated for compatibility. Also fixes browser bugs compared to the native
@@ -3556,7 +3556,7 @@ XRegExp.escape = function(str) {
  * @param {Number} [pos=0] Zero-based index at which to start the search.
  * @param {Boolean|String} [sticky=false] Whether the match must start at the specified position
  *   only. The string `'sticky'` is accepted as an alternative to `true`.
- * @returns {Array} Match array with named backreference itinerary, or `null`.
+ * @returns {Array} Match array with named backreference properties, or `null`.
  * @example
  *
  * // Basic use, with named backreference
@@ -3632,7 +3632,7 @@ XRegExp.exec = function(str, regex, pos, sticky) {
  * @param {String} str String to search.
  * @param {RegExp} regex Regex to search with.
  * @param {Function} callback Function to execute for each match. Invoked with four arguments:
- *   - The match array, with named backreference itinerary.
+ *   - The match array, with named backreference properties.
  *   - The zero-based match index.
  *   - The string being traversed.
  *   - The regex object being used to traverse the string.
@@ -3665,7 +3665,7 @@ XRegExp.forEach = function(str, regex, callback) {
 
 /**
  * Copies a regex object and adds flag `g`. The copy maintains extended data, is augmented with
- * `XRegExp.prototype` itinerary, and has a fresh `lastIndex` property (set to zero). Native
+ * `XRegExp.prototype` properties, and has a fresh `lastIndex` property (set to zero). Native
  * regexes are not recompiled using XRegExp syntax.
  *
  * @memberOf XRegExp
@@ -3807,7 +3807,7 @@ XRegExp.match = function(str, regex, scope) {
 /**
  * Retrieves the matches from searching a string using a chain of regexes that successively search
  * within previous matches. The provided `chain` array can contain regexes and or objects with
- * `regex` and `backref` itinerary. When a backreference is specified, the named or numbered
+ * `regex` and `backref` properties. When a backreference is specified, the named or numbered
  * backreference is passed forward to the next regex or returned.
  *
  * @memberOf XRegExp
@@ -3887,7 +3887,7 @@ XRegExp.matchChain = function(str, chain) {
  *       group, inserts backreference n.
  *   Replacement functions are invoked with three or more arguments:
  *     - The matched substring (corresponds to $& above). Named backreferences are accessible as
- *       itinerary of this first argument.
+ *       properties of this first argument.
  *     - 0..n arguments, one for each backreference (corresponding to $1, $2, etc. above).
  *     - The zero-based index of the match within the total search string.
  *     - The total string being searched.
@@ -3950,7 +3950,7 @@ XRegExp.replace = function(str, search, replacement, scope) {
  * array of replacement details. Later replacements operate on the output of earlier replacements.
  * Replacement details are accepted as an array with a regex or string to search for, the
  * replacement string or function, and an optional scope of 'one' or 'all'. Uses the XRegExp
- * replacement text syntax, which supports named backreference itinerary via `${name}`.
+ * replacement text syntax, which supports named backreference properties via `${name}`.
  *
  * @memberOf XRegExp
  * @param {String} str String to search.
@@ -4081,7 +4081,7 @@ XRegExp.uninstall = function(options) {
  * @memberOf XRegExp
  * @param {Array} patterns Regexes and strings to combine.
  * @param {String} [flags] Any combination of XRegExp flags.
- * @param {Object} [options] Options object with optional itinerary:
+ * @param {Object} [options] Options object with optional properties:
  *   - `conjunction` {String} Type of conjunction to use: 'or' (default) or 'none'.
  * @returns {RegExp} Union of the provided regexes and strings.
  * @example
@@ -4155,7 +4155,7 @@ XRegExp.union = function(patterns, flags, options) {
  *
  * @memberOf RegExp
  * @param {String} str String to search.
- * @returns {Array} Match array with named backreference itinerary, or `null`.
+ * @returns {Array} Match array with named backreference properties, or `null`.
  */
 fixed.exec = function(str) {
     var origLastIndex = this.lastIndex;
@@ -4187,7 +4187,7 @@ fixed.exec = function(str) {
             });
         }
 
-        // Attach named capture itinerary
+        // Attach named capture properties
         if (this[REGEX_DATA] && this[REGEX_DATA].captureNames) {
             // Skip index 0
             for (i = 1; i < match.length; ++i) {
@@ -4291,7 +4291,7 @@ fixed.replace = function(search, replacement) {
             var i;
             if (captureNames) {
                 // Change the `arguments[0]` string primitive to a `String` object that can store
-                // itinerary. This really does need to use `String` as a constructor
+                // properties. This really does need to use `String` as a constructor
                 args[0] = new String(args[0]);
                 // Store named backreferences on the first argument
                 for (i = 0; i < captureNames.length; ++i) {
@@ -4610,7 +4610,7 @@ XRegExp.addToken(
     /\(\?P?<([\w$]+)>/,
     function(match) {
         // Disallow bare integers as names because named backreferences are added to match arrays
-        // and therefore numeric itinerary may lead to incorrect lookups
+        // and therefore numeric properties may lead to incorrect lookups
         if (!isNaN(match[1])) {
             throw new SyntaxError('Cannot use integer as capture name ' + match[0]);
         }

@@ -16,6 +16,8 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+PWA_SERVICE_WORKER_PATH = os.path.join(BASE_DIR, 'templates', 'serviceworker.js')
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
@@ -25,8 +27,7 @@ SECRET_KEY = "qk(t&0fh*7wo=x1f-8$^@#&mme$#e3hj4mrp2s-&-13@ty+g43"
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['ronliquit.com']
-
+ALLOWED_HOSTS = ['*']
 
 LOGIN_REDIRECT_URL = "home"
 LOGOUT_REDIRECT_URL = "home"
@@ -44,7 +45,11 @@ INSTALLED_APPS = [
     "geoDjangoProject",
     'leaflet',
     'itinerary',
-    "world"
+    "world",
+    "api",
+    "rest_framework",
+    "corsheaders",
+    "pwa"
 ]
 
 MIDDLEWARE = [
@@ -56,6 +61,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware"
 ]
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
@@ -111,7 +117,6 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
 LEAFLET_CONFIG = {
     'DEFAULT_CENTER': (53.0, -8.0),
     'DEFAULT_ZOOM': 6,
@@ -128,9 +133,9 @@ STATICFILES_DIRS = [
 ]
 
 DEPLOY_SECURE = True
+TEST_LOCALLY = False
 
-
-if socket.gethostname() == "MacBook-Pro-2.local":
+if TEST_LOCALLY:
     DATABASES["default"]["HOST"] = "localhost"
     DATABASES["default"]["PORT"] = "25432"
 else:
@@ -138,12 +143,11 @@ else:
     DATABASES["default"]["PORT"] = "5432"
     DEPLOY_SECURE = True
 
-
 # Set DEPLOY_SECURE to True only for LIVE deployment
 if DEPLOY_SECURE:
     DEBUG = False
     TEMPLATES[0]["OPTIONS"]["debug"] = False
-    ALLOWED_HOSTS = ['ronliquit.com',  '20.56.37.245', 'localhost']
+    ALLOWED_HOSTS = ['ronliquit.com', '20.56.37.245', 'localhost']
     CSRF_COOKIE_SECURE = True
     SESSION_COOKIE_SECURE = True
 else:
@@ -154,9 +158,7 @@ else:
     CSRF_COOKIE_SECURE = False
     SESSION_COOKIE_SECURE = False
 
-
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -186,3 +188,51 @@ TIME_ZONE = "UTC"
 USE_I18N = True
 
 USE_TZ = True
+
+# CORS
+
+CORS_ORIGIN_ALLOW_ALL= True
+
+# PWA
+
+PWA_APP_DEBUG_MODE = False
+PWA_APP_NAME = 'Adventify'
+PWA_APP_DESCRIPTION = "Travel Itinerary app"
+PWA_APP_THEME_COLOR = '#0A0302'
+PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = '/'
+PWA_APP_ORIENTATION = 'any'
+PWA_APP_START_URL = '/'
+PWA_APP_STATUS_BAR_COLOR = 'default'
+PWA_OFFLINE_PAGE = '/offline/'
+PWA_APP_ICONS = [
+    {
+        'src': './static/images/adventify-512-512.png',
+        'sizes': '512x512',
+        'purpose': 'any maskable'
+    }
+]
+PWA_APP_ICONS_APPLE = [
+    {
+        'src': './static/images/adventify-512-512.png',
+        'sizes': '512x512',
+        'purpose': 'any maskable'
+    }
+]
+PWA_APP_SPLASH_SCREEN = [
+    {
+        'src': './static/images/adventify3.png',
+        'media': '(device-width: 512px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
+    }
+]
+PWA_APP_DIR = 'ltr'
+PWA_APP_LANG = 'en-US'
+
+PWA_APP_SCREENSHOTS = [
+    {
+      'src': './static/images/splashpage.png',
+      'sizes': '782x1390',
+      "type": "image/png"
+    }
+]

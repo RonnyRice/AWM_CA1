@@ -13,11 +13,11 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='itineraryevent',
             name='ItineraryEvent_title',
-            field=models.CharField(default='default title', max_length=100),
+            field=models.CharField(default='Default title', max_length=100),
         ),
         migrations.AlterField(
             model_name='itineraryplan',
             name='ItineraryPlan_title',
-            field=models.CharField(default=' default title', max_length=100),
+            field=models.CharField(default='Default title', max_length=100),
         ),
     ]

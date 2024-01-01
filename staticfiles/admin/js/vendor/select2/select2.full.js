@@ -6692,7 +6692,7 @@ S2.define('select2/selection/stopPropagation',[
         deltaX = Math[ deltaX >= 1 ? 'floor' : 'ceil' ](deltaX / lowestDelta);
         deltaY = Math[ deltaY >= 1 ? 'floor' : 'ceil' ](deltaY / lowestDelta);
 
-        // Normalise offsetX and offsetY itinerary
+        // Normalise offsetX and offsetY properties
         if ( special.settings.normalizeOffset && this.getBoundingClientRect ) {
             var boundingRect = this.getBoundingClientRect();
             offsetX = event.clientX - boundingRect.left;
@@ -6707,7 +6707,7 @@ S2.define('select2/selection/stopPropagation',[
         event.offsetY = offsetY;
         // Go ahead and set deltaMode to 0 since we converted to pixels
         // Although this is a little odd since we overwrite the deltaX/Y
-        // itinerary with normalized deltas.
+        // properties with normalized deltas.
         event.deltaMode = 0;
 
         // Add event and delta to the front of the arguments

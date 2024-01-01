@@ -18,11 +18,14 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import TemplateView
 
-
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
+    path('', include("pwa.urls")),
     path("", include("itinerary.urls")),
+    path("api/v1/", include("api.urls")),
+    path('offline/', TemplateView.as_view(template_name='offline.html'), name='offline'),
+
 ]
 
 ALLOWED_HOSTS = ['*']

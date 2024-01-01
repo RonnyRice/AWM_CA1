@@ -45,15 +45,16 @@ class Profile(models.Model):
 
 class ItineraryPlan(models.Model):
     ItineraryPlan_id = models.AutoField(primary_key=True)
-    ItineraryPlan_title = models.CharField(max_length=100, default=" default title")
+    ItineraryPlan_title = models.CharField(max_length=100, default="Default title")
     ItineraryPlan_description = models.TextField(help_text="Enter the description of this holiday", blank=True)
     user = models.ForeignKey(defaultUserModel, default=None, on_delete=models.CASCADE)
+    sharedStatus = models.BooleanField(default=False)
 
 
 class ItineraryEvent(models.Model):
     ItineraryEvent_id = models.AutoField(primary_key=True)
     ItineraryPlan_id = models.ForeignKey(ItineraryPlan, on_delete=models.CASCADE)
-    ItineraryEvent_title = models.CharField(max_length=100, default="default title")
+    ItineraryEvent_title = models.CharField(max_length=100, default="Default title")
     itineraryEvent_description = models.TextField(help_text="Enter the description of this event")
     itineraryEvent_datetime = models.DateTimeField(default=now)
     lon = models.FloatField()

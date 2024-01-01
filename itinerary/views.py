@@ -17,20 +17,33 @@ def index(request):
     user_ItineraryEventsSelected = []
     user_ItineraryPlan = []
 
-    user_ItineraryPlan = ItineraryPlan.objects.filter(user=request.user.id)
+    if 'user_itinerary_option_session' not in request.session:
+        user_itinerary_option = "0"
+    else:
+        user_itinerary_option = request.session["user_itinerary_option_session"]
+
+    if user_itinerary_option == "1":
+        user_ItineraryPlan = ItineraryPlan.objects.filter(sharedStatus=True).exclude(user=request.user.id)
+
+    if user_itinerary_option == "0":
+        user_ItineraryPlan = ItineraryPlan.objects.filter(user=request.user.id)
+
     if 'user_ItineraryPlanSelected_ID' in request.session and user_ItineraryPlan:
         try:
+
             user_ItineraryPlanSelected = user_ItineraryPlan.get(
                 ItineraryPlan_id=int(request.session["user_ItineraryPlanSelected_ID"]))
 
             user_ItineraryEventsSelected = ItineraryEvent.objects.filter(
-                ItineraryPlan_id=int(request.session["user_ItineraryPlanSelected_ID"])).order_by('itineraryEvent_datetime')
+                ItineraryPlan_id=int(request.session["user_ItineraryPlanSelected_ID"])).order_by(
+                'itineraryEvent_datetime')
         except Exception as e:
             user_ItineraryPlanSelected = None
             user_ItineraryEventsSelected = None
     return render(request, 'home.html', {"user_ItineraryPlan": user_ItineraryPlan,
                                          "user_ItineraryPlanSelected": user_ItineraryPlanSelected,
-                                         "user_ItineraryEventsSelected": user_ItineraryEventsSelected})
+                                         "user_ItineraryEventsSelected": user_ItineraryEventsSelected,
+                                         "user_itinerary_option": user_itinerary_option})
 
 
 @login_required
@@ -40,12 +53,29 @@ def addItinerary(request):
             ItineraryPlan_models = ItineraryPlan(None,
                                                  request.POST["itineraryPlan_name"],
                                                  request.POST["itineraryPlan_desc"],
-                                                 request.user.id)
+                                                 request.user.id,
+                                                 False)
             ItineraryPlan_models.save()
+
             return redirect('home')
         except Exception as e:
             return render(request, 'Error.html', {'error_message': str(e)}, status=404)
 
+    return render(request, "home.html")
+
+
+@login_required
+def updateItineraryShared(request):
+    if request.POST:
+        try:
+            ItineraryPlan_selected = ItineraryPlan.objects.get(ItineraryPlan_id=int(request.POST["ItineraryPlan_id"]),
+                                                               user=request.user.id)
+            ItineraryPlan_selected.sharedStatus = request.POST["ItineraryPlan_SharedOption"] == 'True'
+            ItineraryPlan_selected.save()
+
+            return redirect('home')
+        except Exception as e:
+            return render(request, 'Error.html', {'error_message': str(e)}, status=404)
     return render(request, "home.html")
 
 
@@ -112,6 +142,7 @@ def deleteItineraryEvent(request):
 
     return render(request, "home.html")
 
+
 @login_required
 def deleteItineraryPlan(request):
     if request.POST:
@@ -123,3 +154,13 @@ def deleteItineraryPlan(request):
             return render(request, 'Error.html', {'error_message': str(e)}, status=404)
 
     return render(request, "home.html")
+
+
+@login_required
+def getItneraryOption(request):
+    request.session["user_itinerary_option_session"] = request.POST["user_itinerary_option"]
+    return redirect('home')
+
+
+def offline(request):
+    return render(request, "offline.html")
